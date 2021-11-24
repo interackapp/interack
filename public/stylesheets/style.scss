@@ -1,0 +1,35 @@
+//Variables
+$color-dark0E: '#0e0e0e';
+$color-dark12: '#121212';
+$color-dark14: '#141414';
+$color-dark21: '#212325';
+$color-darkff: '#ffffff';
+$color-darkf4: '#f4f4f4';
+$color-blue: '#B7E5FF';
+$color-blue-Dark: '#68B7E3';
+
+
+// reset
+*, *::after, *::before {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+}
+
+a {
+  color: #00B7FF
+}
+// utility calss
+.bg-dark0e {
+  background-color: $color-dark0E;
+}
+
+.bg-dark12 {
+  background-color: $color-dark12;
+}
+
+

@@ -1,0 +1,81 @@
+<% getLink = function(value, tag){
+    if(tag === 'linkedin') { 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% } else if(tag === 'instagram'){ %>
+        <%= "https://www.instagram.com/"+value %>
+    <% } else if(tag === 'facebook'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% }  else if(tag === 'youtube'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% }  else if(tag === 'twitter'){ %>
+        <%= "https://www.twitter.com/"+value %>
+    <% }  else if(tag === 'pinterest'){ %>
+        <%= "https://www.pinterest.com/"+value %>
+    <% }  else if(tag === 'snapchat'){ %>
+        <%= "https://www.snapchat.com/add/"+value %>
+    <% }  else if(tag === 'tiktok'){ 
+        if(value.includes("@")) { %>
+            <%= "https://www.tiktok.com/"+value %>
+        <% }else { %>
+            <%= "https://www.tiktok.com/@"+value %>
+        <% } %>
+    <% } else if(tag === 'twitch'){ %>
+        <%= "https://www.twitch.tv/"+value %>
+    <% } else if(tag === 'behance'){ %>
+        <%= "https://www.behance.net/"+value %>
+    <% } else if(tag === 'email'){ %>
+        <%= "mailto:"+value %>
+    <% } else if(tag === 'text'){ %>
+        <%= "sms:"+value %>
+    <% } else if(tag === 'call'){ %>
+        <%= "tel:"+value %>
+    <% } else if(tag === 'whatsapp'){ %>
+        <%= "https://wa.me/:"+value %>
+    <% } else if(tag === 'workEmail'){ %>
+        <%= "mailto:"+value %>
+    <% } else if(tag === 'skype'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% } else if(tag === 'calendly'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% } else if(tag === 'customLink'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% } else if(tag === 'website'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% } else if(tag === 'paypal'){ 
+        if(value.includes("http")) { %>
+            <%= value %>
+        <% }else { %>
+            <%= "https://"+value %>
+        <% } %>
+    <% } else if(tag === 'venmo'){ %>
+        <%= "https://www.venmo.com/"+value %>
+    <% } %>
+<% } %>

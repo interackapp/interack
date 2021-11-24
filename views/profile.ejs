@@ -1,0 +1,401 @@
+<% include functions/functions %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <link rel="shortcut icon" href="/public/images/logo/logo-m-2.png" type="image/x-icon">
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/public/stylesheets/main.css" />
+  </head>
+
+  <body class="bg-dark12">
+    <% if(user.active){ %>
+    <div class="main-wrapper <%= user.colorTheme %>">
+      <div class="top-section">
+        <div class="bg-card"></div>
+        <div class="container top-container">
+          <div class="top-section-top-card">
+            <div class="row">
+              <div class="col-5">
+                <img
+                  src="<% if(user.avatar) { %> <%= '/uploads/'+user.avatar %> <% }else { %> <%= '/public/images/logo/avatar.webp' %><%} %>"
+                  alt=""
+                  class="profile-image"
+                />
+              </div>
+              <div class="col-7">
+                <div
+                  class="<% if(user.first_name.length + user.last_name.length > 12) { %> <%= 'name text-white font-size23px' %>  <% } else { %> <%= 'name text-white font-size25px' %> <% } %> "
+                >
+                  <%= user.first_name %> <%= user.last_name %>
+                </div>
+                <div class="desc text-white"><%- user.short_bio.split('\n').join('</br>') %></div>
+                <% if(user.saveToContact) { %>
+                <button
+                  class="btn btn-primary btn-custome"
+                  id="save-to-contact-btn"
+                  onclick="generateVCard('<%= user._id %>', '<%= base.baseUrl %>')"
+                >
+                  <img
+                    src="/public/images/web/UserCirclePlus.png"
+                    alt=""
+                    class="icon-sm-btn"
+                  />
+                  <span id="save-to-contact-text">Save to contacts</span>
+                </button>
+                <% } %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="container edit-container d-flex justify-content-center align-items-center"
+        >
+          <button class="edit" data-toggle="modal" data-target="#exampleModal">
+            <div class="editbtn">
+              <img src="/public/images/web/Handshake.png" alt="" />
+            </div>
+            <div class="edit-text">Connect with me</div>
+          </button>
+        </div>
+        <div
+          class="container d-flex justify-content-center align-items-start flex-wrap"
+        >
+          <% for(let i=0; i < user.cards.length; i++){ if(user.cards[i].active)
+          { %>
+          <a
+            class="card"
+            href="<% getLink(user.cards[i].value, user.cards[i].tag.split('_')[0]) %>"
+            target="_blank"
+          >
+            <div class="cardtop">
+              <img
+                src="<%= user.cards[i].img %>"
+                alt=""
+                class="img"
+              />
+            </div>
+            <div class="<% if(user.cards[i].name.length > 12) { %> <%= 'card-name font-size10px' %>  <% } else { %> <%= 'card-name font-size13px' %> <% } %>"><%= user.cards[i].name %><% if(user.cards[i].name.length > 16) {%><%=  '...' %><%} %></div>
+          </a>
+          <% } } %>
+        </div>
+      </div>
+      <a href="https://www.miitap.com" target="_blank">
+        <div class="bottom">
+          <% if(
+            user.colorTheme === "bg-balck" 
+            || user.colorTheme === "bg-gray" 
+            || user.colorTheme === "bg-darkBlue" 
+            || user.colorTheme === "bg-red" 
+            || user.colorTheme === "bg-redBrown"
+            ){ %>
+              <img src="/public/images/logo/logo.png" alt="" class="bottom-img" />
+          <% }else{ %>
+              <img src="/public/images/logo/logo_black.png" alt="" class="bottom-img" />
+          <% } %>
+        </div>
+      </a>
+    </div>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <form
+              action=""
+              onsubmit="submitForm(event, '<%= user.email %>', '<%= user._id %>', '<%= user.first_name %>', '<%= user.last_name %>', '<%= base.baseUrl %>' ); return false;"
+            >
+              <div class="textboldB">
+                Connect with <br />
+                <%= user.first_name %> <%= user.last_name %>
+              </div>
+              <div class="textB">
+                Stay in touch by sharing your info with <%= user.first_name %>
+              </div>
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="/public/images/web/UserCircle.png" alt="" />
+                </div>
+                <div class="inputbox">
+                  <input
+                    type="text"
+                    name=""
+                    id="contact_name"
+                    class="input"
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+              </div>
+              <!--  -->
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="/public/images/web/Envelope.png" alt="" />
+                </div>
+                <div class="inputbox">
+                  <input
+                    type="email"
+                    name=""
+                    id="contact_email"
+                    class="input"
+                    placeholder="Your email"
+                    required
+                  />
+                </div>
+              </div>
+              <!--  -->
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="/public/images/web/DeviceMobile.png" alt="" />
+                </div>
+                <div class="inputbox">
+                  <input
+                    type="text"
+                    name=""
+                    id="contact_number"
+                    class="input"
+                    placeholder="Your number"
+                  />
+                </div>
+              </div>
+              <!--  -->
+              <div class="input-wrapper">
+                <div class="input-icon">
+                  <img src="/public/images/web/NotePencil.png" alt="" />
+                </div>
+                <div class="inputbox">
+                  <textarea
+                    type="text"
+                    name=""
+                    id="contact_message"
+                    class="input"
+                    placeholder="Leave a note for <%= user.first_name %>"
+                  ></textarea>
+                </div>
+              </div>
+              <button
+                class="btn btn-primary btn-custome btn-lg"
+                type="submit"
+                id="submit-btn"
+              >
+                <img
+                  src="/public/images/web/UserCirclePlus.png"
+                  alt=""
+                  class="icon-sm-btn"
+                />
+                Connect
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- modal -->
+    <% } else{ %>
+    <div class="main-wrapper-bg">
+      <img src="/public/images/logo/bgDesign.png" alt="" class="bg-img" />
+      <img src="/public/images/logo/logo.png" alt="" class="logoLg" />
+      <img src="/public/images/web/EyeSlash.png" alt="" class="eye" />
+      <div class="textboldF">This is a private profile</div>
+      <div class="textF">
+        This profile is currently <br />
+        not available please try again later.
+      </div>
+    </div>
+    <% } %>
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+      crossorigin="anonymous"
+    ></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+    <script src="//cdn.jsdelivr.net/npm/promise-polyfill@8/dist/polyfill.js"></script>
+    <script src="/public/js/jquery.base64.min.js"></script>
+    <script type="module">
+      import VCard from "https://cdn.skypack.dev/vcard-creator";
+      var myVCard = new VCard();
+      window.vcard = myVCard;
+    </script>
+    <script type="module">
+      import ConnectionUserTemplate from "../templates/ConnectionUserTemplate.js";
+      import ConnectionVisitorTemplate from "../templates/ConnectionVisitorTemplate.js";
+      window.ConnectionUserTemplate = ConnectionUserTemplate;
+      window.ConnectionVisitorTemplate = ConnectionVisitorTemplate;
+    </script>
+    <script>
+      async function submitForm(e, emailTo, id, firstName, lastName, baseUrl) {
+        e.preventDefault();
+        try {
+          document.querySelector("#submit-btn").disabled = true;
+          document.querySelector("#submit-btn").innerHTML = "...";
+          let name = document.querySelector("#contact_name").value;
+          let email = document.querySelector("#contact_email").value;
+          let number = document.querySelector("#contact_number").value;
+          let message = document.querySelector("#contact_message").value;
+          fetch("https://miitap.me/api/contacts/send-mail", {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify({
+              fromAlias: "miitap <no-reply@miitap.me>",
+              to: emailTo,
+              subject: `${name} wants to connect with you`,
+              body: window.ConnectionUserTemplate({
+                name,
+                email,
+                number,
+                message,
+                baseUrl,
+              }),
+            }),
+          });
+          fetch("https://miitap.me/api/contacts/send-mail", {
+            method: "POST",
+            mode: "cors",
+            cache: "no-cache",
+            credentials: "same-origin",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            redirect: "follow",
+            referrerPolicy: "no-referrer",
+            body: JSON.stringify({
+              fromAlias: "miitap <no-reply@miitap.me>",
+              to: email,
+              subject: `${firstName} ${lastName} wants to connect with you`,
+              body: window.ConnectionVisitorTemplate({
+                email: emailTo,
+                name: `${firstName} ${lastName}`,
+                profileId: id,
+                baseUrl,
+                firstName,
+              }),
+            }),
+          });
+          setTimeout(()=>{
+            Swal.fire({
+              icon: "success",
+              title: `We've sent your request to ${firstName} ${lastName}`,
+              showConfirmButton: false,
+              timer: 2500,
+            });
+            setTimeout(() => {
+              $("#exampleModal").modal("hide");
+            }, 2600);
+          }, 1500);
+        } catch (err) {
+          console.log(err);
+        } finally {
+          document.querySelector("#submit-btn").disabled = false;
+          document.querySelector("#submit-btn").innerHTML = "Connect";
+        }
+      }
+      function download(data, filename, type) {
+        var file = new Blob([data], { type: type });
+        if (window.navigator.msSaveOrOpenBlob)
+          // IE10+
+          window.navigator.msSaveOrOpenBlob(file, filename);
+        else {
+          // Others
+          var a = document.createElement("a"),
+            url = URL.createObjectURL(file);
+          a.href = url;
+          // a.download = filename;
+          a.target = "_top";
+          document.body.appendChild(a);
+          a.click();
+          setTimeout(function () {
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          }, 0);
+        }
+      }
+      const getBase64FromUrl = async (url) => {
+        const data = await fetch(url);
+        const blob = await data.blob();
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(blob);
+          reader.onloadend = function () {
+            const base64data = reader.result;
+            resolve(base64data);
+          };
+        });
+      };
+      async function generateVCard(id, base) {
+        document.querySelector("#save-to-contact-text").innerText =
+          "loading...";
+        document.querySelector("#save-to-contact-btn").disabled = true;
+        fetch(`${base}api/profile/public-profile?id=${id}`)
+          .then((response) => response.json())
+          .then(async (data) => {
+            vcard
+              .addName(data.last_name, data.first_name, "", "", "")
+              .addCompany(data.workOrganization)
+              .addJobtitle(data.workTitle)
+              .addRole(data.short_bio)
+              .addEmail(data.email)
+              .addEmail(data.workEmail)
+              .addPhoneNumber(data.phone, "PREF;WORK")
+              .addPhoneNumber(data.workPhone, "WORK")
+              .addURL(data.websiteURL);
+            if (data.avatar) {
+              let url = `${base}uploads/${data.avatar}`;
+              const myBase64 = await getBase64FromUrl(url);
+              vcard.addPhoto(myBase64.split(",")[1], "JPEG");
+            }
+            const output = vcard.toString();
+            // const preElement = document.querySelector('#output')
+            const outputNode = document.createTextNode(output);
+            download(output, `${data.first_name}.vcf`, "text/x-vcard");
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: `Something went wrong!`,
+              showConfirmButton: false,
+              timer: 2500,
+            });
+          })
+          .finally(() => {
+            document.querySelector("#save-to-contact-text").innerText =
+              "Save to contacts";
+            document.querySelector("#save-to-contact-btn").disabled = false;
+          });
+      }
+    </script>
+  </body>
+</html>
