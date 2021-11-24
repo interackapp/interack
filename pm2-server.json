@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "interack-api",
+            "script": "npm",
+            "args": "start"
+        }
+    ]
+}
